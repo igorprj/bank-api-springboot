@@ -1,0 +1,25 @@
+package com.api.API_Bancaria.Controllers;
+
+import com.api.API_Bancaria.Dtos.AccountRequestDto;
+import com.api.API_Bancaria.Dtos.AccountResponseDto;
+import com.api.API_Bancaria.model.Account;
+import com.api.API_Bancaria.services.Services;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/v1/Account")
+public class AccountController {
+
+    private final Services services;
+    public AccountController(Services services) {
+        this.services = services;
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public AccountResponseDto createAccount(@RequestBody AccountRequestDto accountdto) {
+        AccountResponseDto accountResponseDto = services.create(accountdto);
+        return accountResponseDto;
+    }
+}

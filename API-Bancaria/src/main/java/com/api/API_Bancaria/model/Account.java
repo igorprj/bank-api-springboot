@@ -23,7 +23,7 @@ public class Account {
     private Long account_Id;
 
     private String account_name;
-    private String account_cpf;
+    private BigDecimal account_cpf;
     private BigDecimal account_balance;
     private String account_agency;
     private String number;
