@@ -6,6 +6,9 @@ import com.api.API_Bancaria.Repositories.AccountRepository;
 import com.api.API_Bancaria.model.Account;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class Services {
 
@@ -13,6 +16,11 @@ public class Services {
 
     public Services(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
+    }
+
+    public List<Account> ListAllAccounts(){
+        List<Account> accounts = accountRepository.findAll();
+        return accounts;
     }
 
     public AccountResponseDto create(AccountRequestDto accountdto){
@@ -27,6 +35,18 @@ public class Services {
         accountRepository.save(account);
 
         AccountResponseDto accountResponseDto = new AccountResponseDto();
+        accountResponseDto.setAccount_name(account.getAccount_name());
+        accountResponseDto.setAccount_cpf(account.getAccount_cpf());
+        accountResponseDto.setAccount_agency(account.getAccount_agency());
+        accountResponseDto.setAccount_balance(account.getAccount_balance());
+        accountResponseDto.setNumber(account.getNumber());
+
+        return accountResponseDto;
+    }
+
+    public AccountResponseDto FindbyId(Long id){
+        AccountResponseDto accountResponseDto = new AccountResponseDto();
+        Account account = accountRepository.findById(id).get();
         accountResponseDto.setAccount_name(account.getAccount_name());
         accountResponseDto.setAccount_cpf(account.getAccount_cpf());
         accountResponseDto.setAccount_agency(account.getAccount_agency());

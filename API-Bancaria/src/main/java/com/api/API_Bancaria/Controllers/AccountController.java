@@ -7,6 +7,8 @@ import com.api.API_Bancaria.services.Services;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/v1/Account")
 public class AccountController {
@@ -16,10 +18,22 @@ public class AccountController {
         this.services = services;
     }
 
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<Account> ListAllAccounts(){
+        return services.ListAllAccounts();
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public AccountResponseDto createAccount(@RequestBody AccountRequestDto accountdto) {
         AccountResponseDto accountResponseDto = services.create(accountdto);
         return accountResponseDto;
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public AccountResponseDto findAccountById(@PathVariable Long id){
+        return services.FindbyId(id);
     }
 }
