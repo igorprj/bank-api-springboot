@@ -36,4 +36,17 @@ public class AccountController {
     public AccountResponseDto findAccountById(@PathVariable Long id){
         return services.FindbyId(id);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAccountById(@PathVariable Long id){
+        services.Delete(id);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public AccountResponseDto updateAccountById(@PathVariable Long id, @RequestBody AccountRequestDto accountdto) {
+
+        return services.UpdateAccount(accountdto, id);
+    }
 }

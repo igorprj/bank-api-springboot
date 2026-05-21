@@ -55,4 +55,30 @@ public class Services {
 
         return accountResponseDto;
     }
+
+    public void Delete(Long id){
+        accountRepository.deleteById(id);
+    }
+
+    public AccountResponseDto UpdateAccount(AccountRequestDto accountdto,Long id){
+        Account account = accountRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Conta não encontrada!"));
+        account.setAccount_Id(account.getAccount_Id());
+        account.setAccount_name(accountdto.getAccount_name());
+        account.setAccount_cpf(accountdto.getAccount_cpf());
+        account.setAccount_agency(accountdto.getAccount_agency());
+        account.setAccount_balance(accountdto.getAccount_balance());
+        account.setNumber(accountdto.getNumber());
+
+        accountRepository.save(account);
+
+        AccountResponseDto accountResponseDto = new AccountResponseDto();
+        accountResponseDto.setAccount_name(account.getAccount_name());
+        accountResponseDto.setAccount_cpf(account.getAccount_cpf());
+        accountResponseDto.setAccount_agency(account.getAccount_agency());
+        accountResponseDto.setAccount_balance(account.getAccount_balance());
+        accountResponseDto.setNumber(account.getNumber());
+
+        return accountResponseDto;
+    }
 }
