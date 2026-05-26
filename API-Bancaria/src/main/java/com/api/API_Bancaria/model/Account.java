@@ -22,8 +22,9 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long account_Id;
 
+
     private String account_name;
-    private BigDecimal account_cpf;
+    private String account_cpf;
     private BigDecimal account_balance;
     private String account_agency;
     private String number;

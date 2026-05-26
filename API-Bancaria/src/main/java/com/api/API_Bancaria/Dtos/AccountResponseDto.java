@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 public class AccountResponseDto<A> {
 
     private String account_name;
-    private BigDecimal account_cpf;
+    private String account_cpf;
     private BigDecimal account_balance;
     private String account_agency;
     private String number;

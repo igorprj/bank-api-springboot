@@ -4,6 +4,7 @@ import com.api.API_Bancaria.Dtos.AccountRequestDto;
 import com.api.API_Bancaria.Dtos.AccountResponseDto;
 import com.api.API_Bancaria.model.Account;
 import com.api.API_Bancaria.services.Services;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,7 @@ public class AccountController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AccountResponseDto createAccount(@RequestBody AccountRequestDto accountdto) {
+    public AccountResponseDto createAccount(@RequestBody @Valid AccountRequestDto accountdto) {
         AccountResponseDto accountResponseDto = services.create(accountdto);
         return accountResponseDto;
     }
@@ -45,7 +46,7 @@ public class AccountController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public AccountResponseDto updateAccountById(@PathVariable Long id, @RequestBody AccountRequestDto accountdto) {
+    public AccountResponseDto updateAccountById(@PathVariable Long id, @RequestBody @Valid AccountRequestDto accountdto) {
 
         return services.UpdateAccount(accountdto, id);
     }
