@@ -3,7 +3,7 @@ package com.api.API_Bancaria.Controllers;
 import com.api.API_Bancaria.Dtos.AccountRequestDto;
 import com.api.API_Bancaria.Dtos.AccountResponseDto;
 import com.api.API_Bancaria.model.Account;
-import com.api.API_Bancaria.services.Services;
+import com.api.API_Bancaria.services.AccountServices;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +14,8 @@ import java.util.List;
 @RequestMapping("/v1/Account")
 public class AccountController {
 
-    private final Services services;
-    public AccountController(Services services) {
+    private final AccountServices services;
+    public AccountController(AccountServices services) {
         this.services = services;
     }
 

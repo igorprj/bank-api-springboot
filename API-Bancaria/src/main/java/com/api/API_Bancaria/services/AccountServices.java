@@ -2,19 +2,19 @@ package com.api.API_Bancaria.services;
 
 import com.api.API_Bancaria.Dtos.AccountRequestDto;
 import com.api.API_Bancaria.Dtos.AccountResponseDto;
+import com.api.API_Bancaria.Exceptions.AccountNotFoundException;
 import com.api.API_Bancaria.Repositories.AccountRepository;
 import com.api.API_Bancaria.model.Account;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class Services {
+public class AccountServices {
 
     private final AccountRepository accountRepository;
 
-    public Services(AccountRepository accountRepository) {
+    public AccountServices(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
 
@@ -46,7 +46,8 @@ public class Services {
 
     public AccountResponseDto FindbyId(Long id){
         AccountResponseDto accountResponseDto = new AccountResponseDto();
-        Account account = accountRepository.findById(id).get();
+        Account account = accountRepository.findById(id)
+                .orElseThrow(() -> new AccountNotFoundException("Conta não encontrada!"));
         accountResponseDto.setAccount_name(account.getAccount_name());
         accountResponseDto.setAccount_cpf(account.getAccount_cpf());
         accountResponseDto.setAccount_agency(account.getAccount_agency());
@@ -62,7 +63,7 @@ public class Services {
 
     public AccountResponseDto UpdateAccount(AccountRequestDto accountdto,Long id){
         Account account = accountRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Conta não encontrada!"));
+                .orElseThrow(() -> new AccountNotFoundException("Conta não encontrada!"));
         account.setAccount_Id(account.getAccount_Id());
         account.setAccount_name(accountdto.getAccount_name());
         account.setAccount_cpf(accountdto.getAccount_cpf());

@@ -3,7 +3,6 @@ package com.api.API_Bancaria.Error;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -17,6 +16,11 @@ public class ErrorResponse {
     public LocalDateTime Timestamp;
 
 
-    public ErrorResponse(String message, int value) {
+    public ErrorResponse(String message, int status) {
+        this.message = message;
+        this.status = status;
+        this.Timestamp = LocalDateTime.now();
     }
+
+
 }
