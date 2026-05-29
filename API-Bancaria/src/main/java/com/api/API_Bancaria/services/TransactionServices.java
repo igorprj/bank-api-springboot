@@ -1,7 +1,9 @@
 package com.api.API_Bancaria.services;
 
 import com.api.API_Bancaria.Dtos.DepostDto;
+import com.api.API_Bancaria.Dtos.SaqueDTO;
 import com.api.API_Bancaria.Exceptions.AccountNotFoundException;
+import com.api.API_Bancaria.Exceptions.InsufficientBalanceException;
 import com.api.API_Bancaria.Repositories.AccountRepository;
 import com.api.API_Bancaria.Repositories.TransactionRepository;
 import com.api.API_Bancaria.model.Account;
@@ -47,5 +49,29 @@ public class TransactionServices {
 
         accountRepository.save(account);
 
+    }
+
+    @Transactional
+    public void saque(SaqueDTO saqueDTO) {
+        Account account = accountRepository
+                .findById(saqueDTO.accountId())
+                .orElseThrow(() -> new AccountNotFoundException("Conta não encontrada!"));
+
+        if (saqueDTO.amount().compareTo(account.getAccount_balance()) > 0 ) {
+            throw new InsufficientBalanceException("Saldo insuficiente!");
+        }
+
+        account.setAccount_balance(
+                account.getAccount_balance().subtract(saqueDTO.amount())
+        );
+
+        Transaction transaction = new Transaction();
+        transaction.setAmount(saqueDTO.amount());
+        transaction.setType(TransactionType.WITHDRAW);
+        transaction.setTimestamp(LocalDateTime.now());
+        transaction.setSenderacoount(account);
+
+        transactionRepository.save(transaction);
+        accountRepository.save(account);
     }
 }
