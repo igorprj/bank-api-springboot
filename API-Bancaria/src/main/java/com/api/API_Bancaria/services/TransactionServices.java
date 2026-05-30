@@ -2,6 +2,7 @@ package com.api.API_Bancaria.services;
 
 import com.api.API_Bancaria.Dtos.DepostDto;
 import com.api.API_Bancaria.Dtos.SaqueDTO;
+import com.api.API_Bancaria.Dtos.TransferDTO;
 import com.api.API_Bancaria.Exceptions.AccountNotFoundException;
 import com.api.API_Bancaria.Exceptions.InsufficientBalanceException;
 import com.api.API_Bancaria.Repositories.AccountRepository;
@@ -12,6 +13,7 @@ import com.api.API_Bancaria.model.TransactionType;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Service
@@ -73,5 +75,39 @@ public class TransactionServices {
 
         transactionRepository.save(transaction);
         accountRepository.save(account);
+    }
+
+    @Transactional
+    public void transfer(TransferDTO  transferDTO) {
+        Account sender = accountRepository
+                .findById(transferDTO.senderId())
+                .orElseThrow(() -> new AccountNotFoundException("Conta não encontrada!"));
+
+        Account receiver = accountRepository
+                .findById(transferDTO.receiverId())
+                .orElseThrow(() -> new AccountNotFoundException("Conta não encontrada!"));
+
+        if (transferDTO.senderId().equals(transferDTO.receiverId())) {
+            throw new IllegalArgumentException("Não é possível transferir para a mesma conta!");
+        }
+
+        if (transferDTO.amount().compareTo(sender.getAccount_balance()) > 0 ) {
+            throw new InsufficientBalanceException("Saldo insuficiente!");
+        }
+
+        sender.setAccount_balance(sender.getAccount_balance().subtract(transferDTO.amount()));
+
+        receiver.setAccount_balance(receiver.getAccount_balance().add(transferDTO.amount()));
+
+        Transaction transaction = new Transaction();
+        transaction.setAmount(transferDTO.amount());
+        transaction.setType(TransactionType.TRANSFER);
+        transaction.setTimestamp(LocalDateTime.now());
+        transaction.setSenderacoount(sender);
+        transaction.setReceiveraccount(receiver);
+        transactionRepository.save(transaction);
+        accountRepository.save(sender);
+        accountRepository.save(receiver);
+
     }
 }
