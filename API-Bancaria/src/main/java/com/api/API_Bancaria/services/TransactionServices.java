@@ -1,8 +1,6 @@
 package com.api.API_Bancaria.services;
 
-import com.api.API_Bancaria.Dtos.DepostDto;
-import com.api.API_Bancaria.Dtos.SaqueDTO;
-import com.api.API_Bancaria.Dtos.TransferDTO;
+import com.api.API_Bancaria.Dtos.*;
 import com.api.API_Bancaria.Exceptions.AccountNotFoundException;
 import com.api.API_Bancaria.Exceptions.InsufficientBalanceException;
 import com.api.API_Bancaria.Repositories.AccountRepository;
@@ -28,18 +26,18 @@ public class TransactionServices {
     }
 
     @Transactional
-    public void deposit(DepostDto depostDto) {
+    public void deposit(DepositRequestDTO depositDto) {
         Account account = accountRepository
-                .findById(depostDto.accountId())
+                .findById(depositDto.accountId())
                 .orElseThrow(() -> new AccountNotFoundException("Conta não encontrada!"));
 
         account.setAccount_balance(
-                account.getAccount_balance().add(depostDto.amount())
+                account.getAccount_balance().add(depositDto.amount())
         );
 
         Transaction transaction = new Transaction();
 
-        transaction.setAmount(depostDto.amount());
+        transaction.setAmount(depositDto.amount());
 
         transaction.setType(TransactionType.DEPOSIT);
 
@@ -54,7 +52,7 @@ public class TransactionServices {
     }
 
     @Transactional
-    public void saque(SaqueDTO saqueDTO) {
+    public void saque(SaqueRequestDTO saqueDTO) {
         Account account = accountRepository
                 .findById(saqueDTO.accountId())
                 .orElseThrow(() -> new AccountNotFoundException("Conta não encontrada!"));
@@ -78,7 +76,7 @@ public class TransactionServices {
     }
 
     @Transactional
-    public void transfer(TransferDTO  transferDTO) {
+    public void transfer(TransferDTO transferDTO) {
         Account sender = accountRepository
                 .findById(transferDTO.senderId())
                 .orElseThrow(() -> new AccountNotFoundException("Conta não encontrada!"));

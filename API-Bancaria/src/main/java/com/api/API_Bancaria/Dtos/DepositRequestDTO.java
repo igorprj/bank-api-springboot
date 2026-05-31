@@ -2,7 +2,7 @@ package com.api.API_Bancaria.Dtos;
 
 import java.math.BigDecimal;
 
-public record DepostDto(
+public record DepositRequestDTO(
         Long accountId,
         BigDecimal amount
 ) {
