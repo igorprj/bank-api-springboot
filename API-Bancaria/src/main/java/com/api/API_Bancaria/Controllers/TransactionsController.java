@@ -6,12 +6,14 @@ import com.api.API_Bancaria.Dtos.TransferDTO;
 import com.api.API_Bancaria.Dtos.TransferRequestDTO;
 import com.api.API_Bancaria.Repositories.TransactionRepository;
 import com.api.API_Bancaria.services.TransactionServices;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+@SecurityRequirement(name = "bearerAuth")
 @RestController
-@RequestMapping("v1/transactions")
+@RequestMapping("/v1/transactions")
 public class TransactionsController {
 
 

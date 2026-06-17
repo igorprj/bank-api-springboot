@@ -29,4 +29,8 @@ public class AccountRequestDto {
 
     @NotNull(message = "O número da conta não pode ser nulo!")
     private String number;
+
+    @NotNull
+    private String password;
+
 }

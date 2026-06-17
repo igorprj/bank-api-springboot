@@ -5,6 +5,8 @@ import com.api.API_Bancaria.Dtos.AccountResponseDto;
 import com.api.API_Bancaria.Exceptions.AccountNotFoundException;
 import com.api.API_Bancaria.Repositories.AccountRepository;
 import com.api.API_Bancaria.model.Account;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,29 +16,49 @@ public class AccountServices {
 
     private final AccountRepository accountRepository;
 
-    public AccountServices(AccountRepository accountRepository) {
+   private final PasswordEncoder passwordEncoder;
+
+    public AccountServices(AccountRepository accountRepository, PasswordEncoder passwordEncoder) {
         this.accountRepository = accountRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public List<Account> ListAllAccounts(){
+    public List<AccountResponseDto> ListAllAccounts(){
         List<Account> accounts = accountRepository.findAll();
-        return accounts;
+
+        return accounts.stream()
+                .map(account -> {
+                    AccountResponseDto dto = new AccountResponseDto();
+                           dto.setAccount_id(account.getAccount_Id());
+                           dto.setAccount_name(account.getAccount_name());
+                           dto.setAccount_cpf(account.getAccountcpf());
+                           dto.setAccount_balance(account.getAccount_balance());
+                           dto.setAccount_agency(account.getAccount_agency());
+                           dto.setNumber(account.getNumber());
+
+                           return dto;
+
+                })
+                .toList();
+
     }
 
     public AccountResponseDto create(AccountRequestDto accountdto){
 
         Account account = new Account();
         account.setAccount_name(accountdto.getAccount_name());
-        account.setAccount_cpf(accountdto.getAccount_cpf());
+        account.setAccountcpf(accountdto.getAccount_cpf());
         account.setAccount_agency(accountdto.getAccount_agency());
         account.setAccount_balance(accountdto.getAccount_balance());
         account.setNumber(accountdto.getNumber());
+        account.setPassword(
+                passwordEncoder.encode(accountdto.getPassword()));
 
         accountRepository.save(account);
 
         AccountResponseDto accountResponseDto = new AccountResponseDto();
         accountResponseDto.setAccount_name(account.getAccount_name());
-        accountResponseDto.setAccount_cpf(account.getAccount_cpf());
+        accountResponseDto.setAccount_cpf(account.getAccountcpf());
         accountResponseDto.setAccount_agency(account.getAccount_agency());
         accountResponseDto.setAccount_balance(account.getAccount_balance());
         accountResponseDto.setNumber(account.getNumber());
@@ -49,7 +71,7 @@ public class AccountServices {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new AccountNotFoundException("Conta não encontrada!"));
         accountResponseDto.setAccount_name(account.getAccount_name());
-        accountResponseDto.setAccount_cpf(account.getAccount_cpf());
+        accountResponseDto.setAccount_cpf(account.getAccountcpf());
         accountResponseDto.setAccount_agency(account.getAccount_agency());
         accountResponseDto.setAccount_balance(account.getAccount_balance());
         accountResponseDto.setNumber(account.getNumber());
@@ -66,7 +88,7 @@ public class AccountServices {
                 .orElseThrow(() -> new AccountNotFoundException("Conta não encontrada!"));
         account.setAccount_Id(account.getAccount_Id());
         account.setAccount_name(accountdto.getAccount_name());
-        account.setAccount_cpf(accountdto.getAccount_cpf());
+        account.setAccountcpf(accountdto.getAccount_cpf());
         account.setAccount_agency(accountdto.getAccount_agency());
         account.setAccount_balance(accountdto.getAccount_balance());
         account.setNumber(accountdto.getNumber());
@@ -75,7 +97,7 @@ public class AccountServices {
 
         AccountResponseDto accountResponseDto = new AccountResponseDto();
         accountResponseDto.setAccount_name(account.getAccount_name());
-        accountResponseDto.setAccount_cpf(account.getAccount_cpf());
+        accountResponseDto.setAccount_cpf(account.getAccountcpf());
         accountResponseDto.setAccount_agency(account.getAccount_agency());
         accountResponseDto.setAccount_balance(account.getAccount_balance());
         accountResponseDto.setNumber(account.getNumber());

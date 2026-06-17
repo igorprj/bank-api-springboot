@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 @Setter
 public class AccountResponseDto<A> {
 
+    private Long account_id;
     private String account_name;
     private String account_cpf;
     private BigDecimal account_balance;

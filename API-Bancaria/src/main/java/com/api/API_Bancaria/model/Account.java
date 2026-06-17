@@ -24,8 +24,9 @@ public class Account {
 
 
     private String account_name;
-    private String account_cpf;
+    private String accountcpf;
     private BigDecimal account_balance;
     private String account_agency;
     private String number;
+    private String password;
 }
